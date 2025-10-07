@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "ES2020", // Современный JS
+    "module": "commonjs", // Для Node
+    "strict": true, // Строгая типизация
+    "esModuleInterop": true, // Для импортов
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist", // Куда компилировать
+    "rootDir": "./src" // Где исходники
+  }
+}
