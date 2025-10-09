@@ -1,24 +1,28 @@
-// backend/src/index.ts
-import express from 'express'; // Импорт Express
-import dotenv from 'dotenv'; // Для загрузки .env
+import express from 'express';
 import cors from 'cors';
-dotenv.config(); // Загружаем env-переменные
+import dotenv from 'dotenv';
+import { initDb } from './db';
 
-const app = express(); // Создаём приложение
-const PORT = process.env.PORT || 5000; // Порт из env или дефолт
+dotenv.config();
 
-app.use(cors({
-    origin: 'http://localhost:3000', // Разрешаем только этот адрес
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Разрешённые методы
-    credentials: true // Если позже добавим куки или авторизацию
-}));
-app.use(express.json()); // Парсит JSON в запросах (для POST/PUT)
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+app.use(cors({ origin: 'http://localhost:3001', methods: ['GET', 'POST', 'PUT', 'DELETE'], credentials: true }));
+app.use(express.json());
+
+// Инициализация БД при старте
+initDb().then(() => {
+    console.log('Database initialized');
+}).catch(err => {
+    console.error('Database initialization failed:', err);
+});
 
 // Тестовый роут
 app.get('/', (req, res) => {
-    res.send('Hello from backend, motherfucker frontender pies of shit baby lets go!'); // Ответ на GET /
+    res.send('Hello from backend!');
 });
 
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`); // Лог при запуске
+    console.log(`Server running on port ${PORT}`);
 });

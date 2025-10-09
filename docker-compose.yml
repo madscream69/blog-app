@@ -1,0 +1,31 @@
+# docker-compose.yml
+version: '3.8'
+services:
+  backend:
+    build:
+      context: ./backend # Папка с бэком
+      dockerfile: Dockerfile # Укажем Dockerfile
+    ports:
+      - "5000:5000" # Маппим порт 5000
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgres://user:password@db:5432/blog_db # URL для PostgreSQL
+    depends_on:
+      - db # Зависит от сервиса db
+    volumes:
+      - ./backend:/app # Монтируем код бэка
+      - /app/node_modules # Сохраняем node_modules
+
+  db:
+    image: postgres:14 # Официальный образ PostgreSQL
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=blog_db
+    volumes:
+      - pgdata:/var/lib/postgresql/data # Сохраняем данные БД
+    ports:
+      - "5432:5432" # Для доступа к БД локально (опционально)
+
+volumes:
+  pgdata: # Именованный volume для данных PostgreSQL
